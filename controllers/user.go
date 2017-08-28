@@ -9,7 +9,7 @@ import (
 )
 
 func CreateUser(c *gin.Context) {
-	user := models.User{Username: c.PostForm("username"), Password: c.PostForm("password")}
+	user := models.User{Username: c.PostForm("username"), Password: c.PostForm("password"), Email: c.PostForm("email")}
 
 	if errs := validator.Validate(user); errs != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"status": http.StatusBadRequest, "message": errs})

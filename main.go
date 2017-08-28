@@ -48,14 +48,18 @@ func main() {
 	api := router.Group("/api/v1/")
 	{
 		api.POST("/login", authMiddleware.LoginHandler)
-		users := api.Group("/users")
-		users.Use(authMiddleware.MiddlewareFunc())
+		usersWithAuth := api.Group("/users")
+		usersWithAuth.Use(authMiddleware.MiddlewareFunc())
 		{
-			users.GET("/", controllers.GetUsers)
+			usersWithAuth.GET("/", controllers.GetUsers)
+			usersWithAuth.GET("/:id", controllers.GetUserDetail)
+			usersWithAuth.PATCH("/:id", controllers.UpdateUserDetail)
+			usersWithAuth.DELETE("/:id", controllers.DeleteUser)
+		}
+
+		users := api.Group("/users")
+		{
 			users.POST("/", controllers.CreateUser)
-			users.GET("/:id", controllers.GetUserDetail)
-			users.PATCH("/:id", controllers.UpdateUserDetail)
-			users.DELETE("/:id", controllers.DeleteUser)
 		}
 
 	}
