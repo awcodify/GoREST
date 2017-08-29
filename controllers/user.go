@@ -4,12 +4,19 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/whatdacode/GoREST/config"
 	"github.com/whatdacode/GoREST/models"
+	"golang.org/x/crypto/bcrypt"
 	"gopkg.in/validator.v2"
+	"log"
 	"net/http"
 )
 
 func CreateUser(c *gin.Context) {
-	user := models.User{Username: c.PostForm("username"), Password: c.PostForm("password"), Email: c.PostForm("email")}
+	hash, err := bcrypt.GenerateFromPassword([]byte(c.PostForm("password")), bcrypt.DefaultCost)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	user := models.User{Username: c.PostForm("username"), Password: string(hash), Email: c.PostForm("email")}
 
 	if errs := validator.Validate(user); errs != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"status": http.StatusBadRequest, "message": errs})
