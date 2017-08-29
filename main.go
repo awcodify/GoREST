@@ -7,6 +7,7 @@ import (
 	"github.com/whatdacode/GoREST/config"
 	"github.com/whatdacode/GoREST/controllers"
 	"github.com/whatdacode/GoREST/models"
+	"golang.org/x/crypto/bcrypt"
 	"time"
 )
 
@@ -21,12 +22,16 @@ func main() {
 		Key:        []byte("OurSecretKey"),
 		Timeout:    time.Hour,
 		MaxRefresh: time.Hour,
-		Authenticator: func(userId string, password string, c *gin.Context) (string, bool) {
-			if (userId == "admin" && password == "admin") || (userId == "test" && password == "test") {
-				return userId, true
+		Authenticator: func(email string, password string, c *gin.Context) (string, bool) {
+			var user models.User
+			db := config.Connect()
+			db.First(&user, "email = ?", email)
+
+			if err := bcrypt.CompareHashAndPassword([]byte(user.Password), []byte(password)); err != nil {
+				return email, false
 			}
 
-			return userId, false
+			return email, true
 		},
 		Authorizator: func(userId string, c *gin.Context) bool {
 			if userId == "admin" {
