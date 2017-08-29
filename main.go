@@ -4,9 +4,9 @@ import (
 	"github.com/appleboy/gin-jwt"
 	"github.com/gin-gonic/gin"
 	_ "github.com/jinzhu/gorm/dialects/mysql"
-	"github.com/whatdacode/sporta/config"
-	"github.com/whatdacode/sporta/controllers"
-	"github.com/whatdacode/sporta/models"
+	"github.com/whatdacode/GoREST/config"
+	"github.com/whatdacode/GoREST/controllers"
+	"github.com/whatdacode/GoREST/models"
 	"time"
 )
 

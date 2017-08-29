@@ -2,8 +2,8 @@ package controllers
 
 import (
 	"github.com/gin-gonic/gin"
-	"github.com/whatdacode/sporta/config"
-	"github.com/whatdacode/sporta/models"
+	"github.com/whatdacode/GoREST/config"
+	"github.com/whatdacode/GoREST/models"
 	"gopkg.in/validator.v2"
 	"net/http"
 )
