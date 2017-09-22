@@ -14,6 +14,9 @@ import (
 func main() {
 	db := config.Connect()
 	db.AutoMigrate(&models.User{})
+	db.AutoMigrate(&models.Role{})
+	db.AutoMigrate(&models.Permission{})
+	db.AutoMigrate(&models.UserRole{})
 
 	router := gin.Default()
 
@@ -33,13 +36,13 @@ func main() {
 
 			return email, true
 		},
-		Authorizator: func(userId string, c *gin.Context) bool {
-			if userId == "admin" {
-				return true
-			}
+		// Authorizator: func(userId string, c *gin.Context) bool {
+		// 	if userId == "admin" {
+		// 		return true
+		// 	}
 
-			return false
-		},
+		// 	return false
+		// },
 		Unauthorized: func(c *gin.Context, code int, message string) {
 			c.JSON(code, gin.H{
 				"code":    code,
