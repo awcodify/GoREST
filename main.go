@@ -1,22 +1,20 @@
 package main
 
 import (
+	"time"
+
 	"github.com/appleboy/gin-jwt"
 	"github.com/gin-gonic/gin"
 	_ "github.com/jinzhu/gorm/dialects/mysql"
 	"github.com/whatdacode/GoREST/config"
 	"github.com/whatdacode/GoREST/controllers"
+	"github.com/whatdacode/GoREST/database"
 	"github.com/whatdacode/GoREST/models"
 	"golang.org/x/crypto/bcrypt"
-	"time"
 )
 
 func main() {
-	db := config.Connect()
-	db.AutoMigrate(&models.User{})
-	db.AutoMigrate(&models.Role{})
-	db.AutoMigrate(&models.Permission{})
-	db.AutoMigrate(&models.UserRole{})
+	database.Migrations()
 
 	router := gin.Default()
 
