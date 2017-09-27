@@ -1,10 +1,12 @@
 package config
 
 import (
-	"github.com/BurntSushi/toml"
-	"github.com/jinzhu/gorm"
 	"log"
 	"os"
+
+	"github.com/BurntSushi/toml"
+	_ "github.com/go-sql-driver/mysql"
+	"github.com/jinzhu/gorm"
 )
 
 type Config struct {
@@ -27,7 +29,7 @@ func Connect() *gorm.DB {
 
 	db, err := gorm.Open("mysql", config.DB_USER+":"+config.DB_PASSWORD+"@/"+config.DB_NAME+"?charset=utf8&parseTime=True&loc=Local")
 	if err != nil {
-		panic("failed to connect database")
+		panic(err)
 	}
 	return db
 }
