@@ -18,9 +18,17 @@ func main() {
 			Subcommands: []cli.Command{
 				{
 					Name:  "migrate",
-					Usage: "add a new template",
+					Usage: "migrate the database",
 					Action: func(c *cli.Context) error {
-						database.Migrations()
+						database.Migrate()
+						return nil
+					},
+				},
+				{
+					Name:  "rollback",
+					Usage: "rollback the last migration",
+					Action: func(c *cli.Context) error {
+						database.Rollback()
 						return nil
 					},
 				},

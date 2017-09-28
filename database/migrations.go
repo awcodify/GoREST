@@ -12,11 +12,11 @@ import (
 )
 
 // Migrations is used for creater the init table for our database
-func Migrations() {
+func Migrations() *gormigrate.Gormigrate {
 	db := config.Connect()
 	db.LogMode(true)
 
-	m := gormigrate.New(db, gormigrate.DefaultOptions, []*gormigrate.Migration{
+	migrations := gormigrate.New(db, gormigrate.DefaultOptions, []*gormigrate.Migration{
 		{
 			ID: time.Now().Format("20060102") + "-users",
 			Migrate: func(tx *gorm.DB) error {
@@ -53,10 +53,23 @@ func Migrations() {
 			},
 		},
 	})
+	return migrations
+}
 
-	if err := m.Migrate(); err != nil {
+// Migrate is used for migrating our database
+func Migrate() {
+	if err := Migrations().Migrate(); err != nil {
 		log.Fatalf("Could not migrate: %v", err)
 	}
 
 	log.Printf("Migration did run successfully")
+}
+
+// Rollback is used for rollback our last migrations
+func Rollback() {
+	if err := Migrations().RollbackLast(); err != nil {
+		log.Fatalf("Could not rollback: %v", err)
+	}
+
+	log.Printf("Rollback did run successfully")
 }
